@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import sun.misc.Request;
 
 @Controller
+
 public class ConvertController {
     @Autowired
     private IConverterService converterService;
 
-    @GetMapping("/convert")
+    @GetMapping("")
     public String convert() {
-
         return "convert";
     }
 

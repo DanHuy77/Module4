@@ -12,7 +12,7 @@ public class DictionaryController {
     @Autowired
     public IDictionaryService dictionaryService;
 
-    @GetMapping("/dictionary")
+    @GetMapping("")
     public String dic() {
         return "dictionary";
     }

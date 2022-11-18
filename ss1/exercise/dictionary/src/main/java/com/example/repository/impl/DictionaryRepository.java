@@ -10,21 +10,22 @@ import java.util.List;
 public class DictionaryRepository implements IDictionaryRepository {
 
     String[] wordList = {"Hello", "World", "Apple"};
+    String[] wordList2 = {"Xin chào", "Thế giới", "Quả táo", "Không tìm thấy"};
 
     @Override
     public String show(String word) {
         String result = "";
         if (word.equals(wordList[0])){
-            result = "Xin chào";
+            result = wordList2[0];
         }
         else if (word.equals(wordList[1])){
-            result = "Thế giới";
+            result = wordList2[1];
         }
         else if (word.equals(wordList[2])){
-            result = "Quả táo";
+            result = wordList2[2];
         }
         else {
-            result = "Không tìm thấy";
+            result = wordList2[3];
         }
         return result;
     }

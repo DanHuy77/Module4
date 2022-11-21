@@ -23,14 +23,14 @@ public class ConvertController {
         return "convert";
     }
 
-    @PostMapping("/convert_to_usd")
+    @PostMapping("/convert-to-usd")
     public String convertToUSD(double vnd, Model model) {
         double result = converterService.toUsd(vnd);
         model.addAttribute("result", result + " $");
         return "convert";
     }
 
-    @PostMapping("/convert_to_vnd")
+    @PostMapping("/convert-to-vnd")
     public String convertToVND(double usd, Model model) {
         double result = converterService.toVnd(usd);
         model.addAttribute("result", result + " VND");

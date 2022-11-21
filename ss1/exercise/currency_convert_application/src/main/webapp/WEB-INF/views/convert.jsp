@@ -11,11 +11,11 @@
     <title>Currency Convert</title>
 </head>
 <body>
-<form method="post" action="/convert_to_usd">
+<form method="post" action="/convert-to-usd">
     <p><span>VND</span><span> </span><span><input type="number" id="vnd" name="vnd"></span> <span><button type="submit">to USD</button></span></p>
 </form>
 
-<form method="post" action="/convert_to_vnd">
+<form method="post" action="/convert-to-vnd">
     <p><span>USD</span><span> </span><span><input type="number" id="usd" name="usd"></span> <span><button type="submit">to VND</button></span></p>
 </form>
 <p>Result: ${result}</p>

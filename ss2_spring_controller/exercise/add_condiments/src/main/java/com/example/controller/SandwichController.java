@@ -35,7 +35,7 @@ public class SandwichController {
     @PostMapping("/add")
     public String addCondiments(int id, String condiments, RedirectAttributes redirectAttributes) {
         sandwichService.addCondiment(id, condiments);
-        redirectAttributes.addFlashAttribute("message", "Thêm gia vị thành công");
+        redirectAttributes.addFlashAttribute("message", "Chọn gia vị thành công");
         return "redirect:/";
     }
 }

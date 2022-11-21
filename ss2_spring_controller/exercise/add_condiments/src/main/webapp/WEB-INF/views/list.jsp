@@ -18,14 +18,14 @@
         <th>Số thứ tự</th>
         <th>Tên bánh</th>
         <th>Gia vị</th>
-        <th>Thêm gia vị</th>
+        <th>Chọn gia vị</th>
     </tr>
     <c:forEach var="sandwich" items="${sandwichList}" varStatus="status">
         <tr>
             <td>${status.count}</td>
             <td>${sandwich.getName()}</td>
             <td>${sandwich.getCondiments()}</td>
-            <td><a href="/add/${sandwich.id}"><button>Thêm gia vị</button></a></td>
+            <td><a href="/add/${sandwich.id}"><button>Chọn gia vị</button></a></td>
         </tr>
     </c:forEach>
 </table>

@@ -27,10 +27,12 @@ public class ProductController {
 
     @GetMapping("/search")
     public String showSearchResult(String searchName, Model model) {
-        Product product = productService.searchByName(searchName);
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
-        model.addAttribute("productList", productList);
+        List<Product> productList = productService.searchByName(searchName);
+        if (!productList.isEmpty()) {
+            model.addAttribute("productList", productList);
+        } else {
+            model.addAttribute("message", "Product not found!");
+        }
         return "search_result";
     }
 
@@ -43,7 +45,7 @@ public class ProductController {
     @PostMapping("/add")
     public String addProduct(Product product, RedirectAttributes redirectAttributes) {
         productService.addNewProduct(product);
-        redirectAttributes.addFlashAttribute("message", "Added new Product");
+        redirectAttributes.addFlashAttribute("message", "Added new Product " + product.getName());
         return "redirect:/";
     }
 
@@ -55,9 +57,9 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProduct(Product product, Integer id, RedirectAttributes redirectAttributes) {
-        productService.editProduct(id, product);
-        redirectAttributes.addFlashAttribute("message", "Edited");
+    public String editProduct(Product product, RedirectAttributes redirectAttributes) {
+        productService.editProduct(product);
+        redirectAttributes.addFlashAttribute("message", "Edited product " + product.getName());
         return "redirect:/";
     }
 
@@ -72,8 +74,9 @@ public class ProductController {
 
     @PostMapping("/remove")
     public String removeProduct(Integer id, RedirectAttributes redirectAttributes) {
-        productService.removeProduct(id);
-        redirectAttributes.addFlashAttribute("message", "Removed");
+        Product product = productService.findById(id);
+        productService.removeProduct(product);
+        redirectAttributes.addFlashAttribute("message", "Removed product" + product.getName());
         return "redirect:/";
     }
 }

@@ -9,7 +9,7 @@
 <body>
 <h1>Add new Product</h1>
 <form th:action="@{/add}" method="post" th:object="${product}">
-    <pre><label th:for="id">ID</label>           <input th:field="*{id}"/></pre>
+<!--    <pre><label th:for="id">ID</label>           <input th:field="*{id}"/></pre>-->
 
     <pre><label th:for="name">Name</label>         <input th:field="*{name}"/></pre>
 

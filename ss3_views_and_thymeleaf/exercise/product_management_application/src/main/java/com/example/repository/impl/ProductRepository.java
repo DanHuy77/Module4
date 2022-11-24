@@ -1,68 +1,122 @@
 package com.example.repository.impl;
 
 import com.example.model.Product;
+import com.example.repository.ConnectorUtil;
 import com.example.repository.IProductRepository;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ProductRepository implements IProductRepository {
 
-    public static List<Product> productList = new ArrayList<>();
-
-    static {
-        productList.add(new Product(1, "Dầu gội", 150000.0, "Bạc hà", "Clear"));
-        productList.add(new Product(2, "Bánh", 50000.0, "Oreo", "Oreón"));
-        productList.add(new Product(3, "Nước cam ép Twister", 15000.0, "Vitamin A&C", "Tropicana"));
-    }
 
     @Override
     public List<Product> showProductList() {
+        Session session = null;
+        List<Product> productList = null;
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            productList = session.createQuery("FROM Product").getResultList();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
         return productList;
     }
 
     @Override
     public void addNewProduct(Product product) {
-        productList.add(product);
-    }
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            transaction = session.beginTransaction();
 
-    @Override
-    public void editProduct(int id, Product product) {
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getId() == id) {
-                productList.set(i, product);
+            session.persist(product);
+
+            transaction.commit();
+
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
     }
 
     @Override
-    public void removeProduct(int id) {
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getId() == id) {
-                productList.remove(productList.get(i));
+    public void editProduct(Product product) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.merge(product);
+
+            transaction.commit();
+
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public void removeProduct(Product product) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            session.delete(product);
+
+            transaction.commit();
+
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
     }
 
     @Override
     public Product findById(int id) {
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getId() == id) {
-                return productList.get(i);
+        Session session = null;
+        Product product = null;
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            product = (Product) session.createQuery("FROM Product where id  =:id").setParameter("id", id).getSingleResult();
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
-        return null;
+
+        return product;
     }
 
     @Override
-    public Product searchByName(String name) {
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getName().equals(name)) {
-                return productList.get(i);
+    public List<Product> searchByName(String name) {
+        Session session = null;
+        List<Product> productList = new ArrayList<>();
+        try {
+            session = ConnectorUtil.sessionFactory.openSession();
+            productList = session.createQuery("FROM Product WHERE name LIKE:name").setParameter("name", "%" + name + "%").getResultList();
+        } catch (NoResultException e) {
+            e.getMessage();
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
-        return null;
+        return productList;
     }
 }

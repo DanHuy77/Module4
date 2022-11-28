@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,16 +33,16 @@ public class BlogController {
     public String showBlogList(@PageableDefault(page = 0, size = 2, sort = {"blogName"}) Pageable pageable, Model model) {
         Page<Blog> blogList = (Page<Blog>) blogService.findAll(pageable);
         model.addAttribute("blogList", blogList);
-        return "list";
+        return "blog/list";
     }
 
     @GetMapping("/add")
     public String showAddBlogForm(Model model, Pageable pageable) {
-        List<Category> categoryList = (List<Category>) categoryService.findAll(pageable);
+        Page<Category> categoryList = (Page<Category>) categoryService.findAll(pageable);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("blog", new Blog());
 
-        return "add";
+        return "blog/add";
     }
 
     @PostMapping("/add")
@@ -55,7 +56,7 @@ public class BlogController {
     public String showRemoveForm(Integer id, Model model) {
         Optional<Blog> blog = blogService.findById(id);
         model.addAttribute("blog", blog);
-        return "remove";
+        return "blog/remove";
     }
 
     @PostMapping("/remove")
@@ -68,10 +69,10 @@ public class BlogController {
     @GetMapping("/edit")
     public String showEditForm(Integer id, Model model, Pageable pageable) {
         Optional<Blog> blog = blogService.findById(id);
-        List<Category> categoryList = (List<Category>) categoryService.findAll(pageable);
+        Page<Category> categoryList = (Page<Category>) categoryService.findAll(pageable);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("blog", blog);
-        return "edit";
+        return "blog/edit";
     }
 
     @PostMapping("/edit")
@@ -85,7 +86,7 @@ public class BlogController {
     public String viewBlog(Integer id, Model model) {
         Optional<Blog> blog = blogService.findById(id);
         model.addAttribute("blog", blog);
-        return "view";
+        return "blog/view";
     }
 
     @GetMapping("/category")
@@ -93,5 +94,46 @@ public class BlogController {
         Page<Category> categoryList = (Page<Category>) categoryService.findAll(pageable);
         model.addAttribute("categoryList", categoryList);
         return "category/list";
+    }
+
+    @GetMapping("/add-category")
+    public String showCategoryAddForm(Model model) {
+        model.addAttribute("category", new Category());
+        return "category/add";
+    }
+
+    @PostMapping("/add-category")
+    public String addCategory(@ModelAttribute("category") Category category, RedirectAttributes redirectAttributes) {
+        categoryService.save(category);
+        redirectAttributes.addFlashAttribute("message", "Added new Category");
+        return "redirect:/category";
+    }
+
+    @GetMapping("/edit-category")
+    public String showCategoryEditForm(Integer id, Model model) {
+        Optional<Category> category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        return "category/edit";
+    }
+
+    @PostMapping("/edit-category")
+    public String editCategory(@ModelAttribute("category") Category category, RedirectAttributes redirectAttributes) {
+        categoryService.save(category);
+        redirectAttributes.addFlashAttribute("message", "Edited Category");
+        return "redirect:/category";
+    }
+
+    @GetMapping("/remove-category")
+    public String showRemoveCategoryForm(Integer id, Model model) {
+        Optional<Category> category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        return "category/remove";
+    }
+
+    @PostMapping("/remove-category")
+    public String removeCategory(Integer id, RedirectAttributes redirectAttributes) {
+        categoryService.remove(id);
+        redirectAttributes.addFlashAttribute("message", "Removed Category");
+        return "redirect:/category";
     }
 }

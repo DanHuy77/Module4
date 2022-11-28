@@ -27,6 +27,15 @@
             <td><textarea th:field="*{content}"></textarea></td>
         </tr>
         <tr>
+            <td>Category</td>
+            <td>
+                <select th:field="*{category}">
+                    <option th:each="category: ${categoryList}" th:value="${category.id}"
+                            th:text="${category.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td></td>
             <td><input type="submit" value="Add Blog"></td>
         </tr>

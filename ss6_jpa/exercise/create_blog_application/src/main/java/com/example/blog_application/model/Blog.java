@@ -1,9 +1,6 @@
 package com.example.blog_application.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Blog {
@@ -13,16 +10,21 @@ public class Blog {
     private String blogName;
     private String writer;
     private String content;
+    @ManyToOne
+    private Category category;
 
     public Blog() {
     }
 
-    public Blog(Integer id, String blogName, String writer, String content) {
+
+    public Blog(Integer id, String blogName, String writer, String content, Category category) {
         this.id = id;
         this.blogName = blogName;
         this.writer = writer;
         this.content = content;
+        this.category = category;
     }
+
 
     public Integer getId() {
         return id;
@@ -54,5 +56,13 @@ public class Blog {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -5,6 +5,7 @@ import com.example.blog_application.repository.ICategoryRepository;
 import com.example.blog_application.service.ICategoryService;
 import com.example.blog_application.service.IGeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,22 @@ public class CategoryService implements ICategoryService {
     private ICategoryRepository categoryRepository;
 
     @Override
-    public List<Category> findAllCategory() {
-        return categoryRepository.findAll();
+    public Page<Category> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Category> findById(Integer id) {
+        return categoryRepository.findById(id);
+    }
+
+    @Override
+    public void save(Category category) {
+        categoryRepository.save(category);
+    }
+
+    @Override
+    public void remove(Integer id) {
+        categoryRepository.deleteById(id);
     }
 }

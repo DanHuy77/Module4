@@ -36,8 +36,8 @@ public class BlogController {
     }
 
     @GetMapping("/add")
-    public String showAddBlogForm(Model model) {
-        List<Category> categoryList = categoryService.findAllCategory();
+    public String showAddBlogForm(Model model, Pageable pageable) {
+        List<Category> categoryList = (List<Category>) categoryService.findAll(pageable);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("blog", new Blog());
 
@@ -66,9 +66,9 @@ public class BlogController {
     }
 
     @GetMapping("/edit")
-    public String showEditForm(Integer id, Model model) {
+    public String showEditForm(Integer id, Model model, Pageable pageable) {
         Optional<Blog> blog = blogService.findById(id);
-        List<Category> categoryList = categoryService.findAllCategory();
+        List<Category> categoryList = (List<Category>) categoryService.findAll(pageable);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("blog", blog);
         return "edit";
@@ -86,5 +86,12 @@ public class BlogController {
         Optional<Blog> blog = blogService.findById(id);
         model.addAttribute("blog", blog);
         return "view";
+    }
+
+    @GetMapping("/category")
+    public String showCategory(Model model, Pageable pageable) {
+        Page<Category> categoryList = (Page<Category>) categoryService.findAll(pageable);
+        model.addAttribute("categoryList", categoryList);
+        return "category/list";
     }
 }

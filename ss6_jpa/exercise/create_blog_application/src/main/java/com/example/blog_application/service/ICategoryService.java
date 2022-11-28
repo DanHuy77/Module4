@@ -4,6 +4,6 @@ import com.example.blog_application.model.Category;
 
 import java.util.List;
 
-public interface ICategoryService {
-    List<Category> findAllCategory();
+public interface ICategoryService extends IGeneralService<Category> {
+
 }

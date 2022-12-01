@@ -26,22 +26,22 @@ public class BookController {
 
     @GetMapping("")
     public String showBookList(Model model, Pageable pageable) {
+        BorrowCode borrowCode = new BorrowCode();
+        String code = String.valueOf(Math.floor((Math.random() * 8999) + 1000));
+        borrowCode.setBorrowCode(code);
+        borrowCodeService.save(borrowCode);
         Page<Book> bookList = bookService.findAll(pageable);
         model.addAttribute("bookList", bookList);
         return "list";
     }
 
-    @GetMapping("/borrow")
-    public String showBorrowForm(Integer id, Model model, Pageable pageable) {
-        Book book = bookService.findById(id);
-        BorrowCode borrowCode = new BorrowCode();
-        String code = String.valueOf(Math.floor((Math.random() * 8999) + 1000));
-        borrowCode.setBorrowCode(code);
-        borrowCodeService.save(borrowCode);
-        model.addAttribute("borrowCode", borrowCode);
-        model.addAttribute("book", book);
-        return "borrow";
-    }
+//    @GetMapping("/borrow")
+//    public String showBorrowForm(Integer id, Model model, Pageable pageable) {
+//        Book book = bookService.findById(id);
+//        model.addAttribute("borrowCode", borrowCode);
+//        model.addAttribute("book", book);
+//        return "borrow";
+//    }
 
     @PostMapping("/borrow")
     public String borrowBook(@ModelAttribute("book") Book book, Integer id, RedirectAttributes redirectAttributes, Pageable pageable) {

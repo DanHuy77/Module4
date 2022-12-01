@@ -28,9 +28,9 @@ public class OderBookController {
     @GetMapping("/{id}/oder")
     public String showFormOder(@PathVariable(value = "id") int id, Model model) {
         model.addAttribute("book", iBookService.findById(id));
-        return "/book/formOder";
+        return "/book/borrow";
     }
-    @PostMapping("/saveOder")
+    @PostMapping("/save-oder")
     public String saveOder(@ModelAttribute(value = "book") Book book, RedirectAttributes redirectAttributes) {
         if (book.getQuantity() > 0) {
             OderBook oderBook = new OderBook();
@@ -42,17 +42,17 @@ public class OderBookController {
             book.setQuantity(quantity);
             iBookService.saveBook(book);
             redirectAttributes.addFlashAttribute("mess", "Oder Success!!! Book rental code is: " + bookRentalCode);
-            return "redirect:/listBook";
+            return "redirect:/";
         }
         return "/book/error";
     }
     @GetMapping("/pay")
     public String showFormReturnBook(Model model) {
         model.addAttribute("oderBook", new OderBook());
-        return "/book/formPay";
+        return "/book/return";
     }
 
-    @PostMapping("/savePay")
+    @PostMapping("/save-pay")
     public String saveReturn(@ModelAttribute(value = "oderBook") OderBook oderBook, RedirectAttributes redirectAttributes) {
         OderBook oderBookReturn = iOderBookService.findByBookRentalCode(oderBook.getBookRentalCode());
         if (oderBookReturn != null) {
@@ -62,8 +62,9 @@ public class OderBookController {
             oderBookReturn.setBookRentalCode((long) 0);
             iOderBookService.saveOder(oderBookReturn);
             redirectAttributes.addFlashAttribute("mess", "Pay Success!");
-            return "redirect:/listBook";
+            return "redirect:/";
         }
         return "/book/error";
     }
+
 }

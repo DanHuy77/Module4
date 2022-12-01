@@ -4,6 +4,6 @@ import com.example.library.model.BorrowCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-//@Repository
+@Repository
 public interface IBorrowCodeRepository extends JpaRepository<BorrowCode, Integer> {
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface IBorrowCodeService {
     Page<BorrowCode> findAll(Pageable pageable);
 
-    Book findById(Integer id);
+    BorrowCode findById(Integer id);
 
     void save(BorrowCode borrowCode);
 

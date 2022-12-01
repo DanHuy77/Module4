@@ -20,7 +20,7 @@ public class OderBookController {
     private IBookService iBookService;
     @Autowired
     private IOderBookService iOderBookService;
-    @GetMapping("/listBook")
+    @GetMapping("")
     public String listBook(Model model){
         model.addAttribute("bookList", iBookService.findAll());
         return "/book/list";

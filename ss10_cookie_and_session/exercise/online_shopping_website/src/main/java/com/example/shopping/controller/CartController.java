@@ -19,6 +19,7 @@ public class CartController {
         return "cart/list";
     }
 
+
     @GetMapping("/confirm")
     public String confirm(@SessionAttribute("cart") CartDto cartDto, RedirectAttributes redirectAttributes) {
         cartDto.getProductMap().clear();

@@ -31,9 +31,9 @@
             <td th:text="${productMap.key.price}"></td>
             <td th:text="${productMap.key.description}"></td>
             <td>
-                <a class="btn btn-success" th:href="@{/remove(id=${productMap.key.id})}">-</a>
+                <a class="btn btn-success" th:href="@{/minus(id=${productMap.key.id})}">-</a>
                 <span th:text="${productMap.value}"></span>
-                <a class="btn btn-success" th:href="@{/add(id=${productMap.key.id})}">+</a>
+                <a class="btn btn-success" th:href="@{/plus(id=${productMap.key.id})}">+</a>
             </td>
         </tr>
         </tr>
@@ -45,9 +45,11 @@
         <td></td>
         <td><a th:href="@{/pay}" class="btn btn-success">Confirm Payment</a></td>
     </tbody>
-
 </table>
 
+<div class="alert alert-warning" role="alert" th:if="${cart == null || cart.productMap.size() == 0}">
+    Your Cart is Empty!
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

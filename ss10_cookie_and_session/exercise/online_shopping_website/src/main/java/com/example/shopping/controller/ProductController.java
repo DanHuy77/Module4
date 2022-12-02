@@ -27,6 +27,12 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
+    @GetMapping("/cart-list")
+    public String showCart(@SessionAttribute("cart") CartDto cartDto, Model model) {
+        model.addAttribute("cartDto", cartDto);
+        return "cart/list";
+    }
+
     @GetMapping("/details")
     public String showDetails(Integer id, Model model, HttpServletResponse response) {
         Cookie cookie = new Cookie("productId", String.valueOf(id));
@@ -47,7 +53,17 @@ public class ProductController {
     }
 
     @GetMapping("/add")
-    public String addToCart(Integer id, @SessionAttribute("cart") CartDto cartDto) {
+    public String addToCart(Integer id, @SessionAttribute("cart") CartDto cartDto, RedirectAttributes redirectAttributes) {
+        Product product = productService.findById(id);
+        ProductDto productDto = new ProductDto();
+        BeanUtils.copyProperties(product, productDto);
+        cartDto.addProduct(productDto);
+        redirectAttributes.addFlashAttribute("message", "Added " + product.getName() + " to Cart");
+        return "redirect:/";
+    }
+
+    @GetMapping("/plus")
+    public String plusProduct(Integer id, @SessionAttribute("cart") CartDto cartDto) {
         Product product = productService.findById(id);
         ProductDto productDto = new ProductDto();
         BeanUtils.copyProperties(product, productDto);
@@ -55,8 +71,8 @@ public class ProductController {
         return "redirect:/cart";
     }
 
-    @GetMapping("/remove")
-    public String removeFromCart(Integer id, @SessionAttribute("cart") CartDto cartDto) {
+    @GetMapping("/minus")
+    public String minusProduct(Integer id, @SessionAttribute("cart") CartDto cartDto) {
         Product product = productService.findById(id);
         ProductDto productDto = new ProductDto();
         BeanUtils.copyProperties(product, productDto);

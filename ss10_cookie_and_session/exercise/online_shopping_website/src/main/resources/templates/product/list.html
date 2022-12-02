@@ -21,9 +21,8 @@
         <th scope="col">Product Name</th>
         <th scope="col">Price</th>
         <th scope="col">Image</th>
-        <th scope="col">Add to Cart</th>
-        <th scope="col">Details</th>
-        <th scope="col">Remove</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -35,10 +34,6 @@
             <td th:text="${product.description}"></td>
             <td><a class="btn btn-success" th:href="@{/add(id=${product.id})}">Add to Cart</a></td>
             <td><a class="btn btn-info" th:href="@{/details(id=${product.id})}">Details</a></td>
-            <td><a class="btn btn-danger"
-                   th:attr="onclick=|passRemoveInfo('${product.id}', '${product.name}')|"
-                   data-bs-toggle="modal" data-bs-target="#remove">Remove</a>
-            </td>
         </tr>
     </th:block>
     </tbody>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove Blog</title>
+</head>
+<body>
+<h1>Remove Category</h1>
+<p>
+    <a href="/category">Category List</a>
+</p>
+<p>Do you want to remove this Category?</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<form th:action="@{/remove-category}" th:object="${category}" method="post">
+    <table>
+        <tr>
+            <td>Category:</td>
+            <td><input readonly type="text" th:field="*{name}"/></td>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Remove Category"></td>
+        </tr>
+    </table>
+    <input hidden type="text" th:field="*{id}"/>
+</form>
+</body>
+</html>

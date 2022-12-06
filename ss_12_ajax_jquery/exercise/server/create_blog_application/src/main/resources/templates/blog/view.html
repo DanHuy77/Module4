@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog View</title>
+</head>
+<body>
+<h1>Blog View</h1>
+<p>
+    <a href="/">Blog List</a>
+</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<form th:action="@{/view}" th:object="${blog}" method="post">
+    <table>
+        <tr>
+            <td>Blog Name:</td>
+            <td><input readonly type="text" th:field="*{blogName}"/></td>
+        </tr>
+        <tr>
+            <td>Writer:</td>
+            <td><input readonly type="text" th:field="*{writer}"/></td>
+        </tr>
+        <tr>
+            <td>Content</td>
+            <td><textarea readonly th:field="*{content}"></textarea></td>
+        </tr>
+        <tr>
+            <td>Category</td>
+            <td><input readonly type="text" th:field="*{category.name}"></td>
+        </tr>
+    </table>
+  
+</form>
+</body>
+</html>

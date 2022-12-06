@@ -5,17 +5,15 @@ import com.example.blog_application.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface IBlogService {
-    Page<Blog> findAll(Pageable pageable);
+public interface IGeneralService<T> {
+    Iterable<T> findAll(Pageable pageable);
 
-    Blog findById(Integer id);
+    Optional<T> findById(Integer id);
 
-    void save(Blog blog);
+    void save(T t);
 
     void remove(Integer id);
-
-    Page<Blog> findBlogByBlogNameContaining(String searchKey, Pageable pageable);
 
 }

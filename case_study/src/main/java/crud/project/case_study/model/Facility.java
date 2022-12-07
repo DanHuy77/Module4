@@ -1,6 +1,7 @@
 package crud.project.case_study.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -21,6 +22,9 @@ public class Facility {
     private RentalType rentalType;
     @ManyToOne
     private FacilityType facilityType;
+
+    @OneToMany(mappedBy = "facility")
+    private Set<Contract> contractSet;
 
     public Facility() {
     }
@@ -119,5 +123,13 @@ public class Facility {
 
     public void setFacilityType(FacilityType facilityType) {
         this.facilityType = facilityType;
+    }
+
+    public Set<Contract> getContractSet() {
+        return contractSet;
+    }
+
+    public void setContractSet(Set<Contract> contractSet) {
+        this.contractSet = contractSet;
     }
 }

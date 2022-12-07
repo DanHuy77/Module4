@@ -4,6 +4,7 @@ import org.hibernate.annotations.Tables;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
 
 import static javax.management.Query.value;
 
@@ -26,22 +27,12 @@ public class Employee {
     @ManyToOne
     private Department department;
 
+    @OneToMany(mappedBy = "employee")
+    Set<Contract> contractSet;
+
     public Employee() {
     }
 
-    public Employee(Integer id, String name, Date dateOfBirth, String idNumber, Double salary, String phoneNumber, String email, String address, Position position, EduLevel eduLevel, Department department) {
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.idNumber = idNumber;
-        this.salary = salary;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.position = position;
-        this.eduLevel = eduLevel;
-        this.department = department;
-    }
 
     public Integer getId() {
         return id;
@@ -129,5 +120,13 @@ public class Employee {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Set<Contract> getContractSet() {
+        return contractSet;
+    }
+
+    public void setContractSet(Set<Contract> contractSet) {
+        this.contractSet = contractSet;
     }
 }

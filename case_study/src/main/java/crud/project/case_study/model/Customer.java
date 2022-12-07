@@ -2,6 +2,8 @@ package crud.project.case_study.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
+
 @Entity
 public class Customer {
     @Id
@@ -17,20 +19,12 @@ public class Customer {
     @ManyToOne
     private CustomerType customerType;
 
+    @OneToMany(mappedBy = "customer")
+    private Set<Contract> contractSet;
+
     public Customer() {
     }
 
-    public Customer(Integer id, String name, Date dateOfBirth, Boolean gender, String idNumber, String phoneNumber, String email, String address, CustomerType customerType) {
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.idNumber = idNumber;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.customerType = customerType;
-    }
 
     public Integer getId() {
         return id;
@@ -102,5 +96,13 @@ public class Customer {
 
     public void setCustomerType(CustomerType customerType) {
         this.customerType = customerType;
+    }
+
+    public Set<Contract> getContractSet() {
+        return contractSet;
+    }
+
+    public void setContractSet(Set<Contract> contractSet) {
+        this.contractSet = contractSet;
     }
 }

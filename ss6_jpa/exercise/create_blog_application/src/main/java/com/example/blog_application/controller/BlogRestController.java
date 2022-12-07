@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Set;
 
-@RestController
+@Controller
 @CrossOrigin("*")
 public class BlogRestController {
 
@@ -31,29 +32,36 @@ public class BlogRestController {
 //    Yêu cầu 1
 
     @GetMapping("")
-    public ResponseEntity<Page<Blog>> showBlogList(@PageableDefault(page = 0, size = 2, sort = {"blogName"}) Pageable pageable, Model model) {
+    public String showBlogList(@PageableDefault(page = 0, size = 2, sort = {"blogName"}) Pageable pageable, Model model) {
+        Page<Blog> blogPage = blogService.findAll(pageable);
+        model.addAttribute("blogList", blogPage);
+        return "blog/list";
+    }
+
+    @GetMapping("/blogService")
+    public ResponseEntity<Page<Blog>> showBlogServiceList(@PageableDefault(page = 0, size = 2, sort = {"blogName"}) Pageable pageable, Model model) {
         Page<Blog> blogList = blogService.findAll(pageable);
         if (blogList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(blogList, HttpStatus.OK);
     }
-//
-//    @GetMapping("/add")
-//    public String showAddBlogForm(Model model, Pageable pageable) {
-//        Page<Category> categoryList = categoryService.findAll(pageable);
-//        model.addAttribute("categoryList", categoryList);
-//        model.addAttribute("blog", new Blog());
-//
-//        return "blog/add";
-//    }
-//
-//    @PostMapping("/add")
-//    public String addBlog(@ModelAttribute("blog") Blog blog, RedirectAttributes redirectAttributes) {
-//        blogService.save(blog);
-//        redirectAttributes.addFlashAttribute("message", "Added new Blog");
-//        return "redirect:/";
-//    }
+
+    @GetMapping("/add")
+    public String showAddBlogForm(Model model, Pageable pageable) {
+        Page<Category> categoryList = categoryService.findAll(pageable);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("blog", new Blog());
+
+        return "blog/add";
+    }
+
+    @PostMapping("/add")
+    public String addBlog(@ModelAttribute("blog") Blog blog, RedirectAttributes redirectAttributes) {
+        blogService.save(blog);
+        redirectAttributes.addFlashAttribute("message", "Added new Blog");
+        return "redirect:/";
+    }
 //
 //    @GetMapping("/remove")
 //    public String showRemoveForm(Integer id, Model model) {

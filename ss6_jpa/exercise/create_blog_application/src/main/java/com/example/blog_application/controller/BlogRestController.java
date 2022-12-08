@@ -31,7 +31,7 @@ public class BlogRestController {
 
 //    Yêu cầu 1
 
-    @GetMapping("")
+    @GetMapping("/blog")
     public String showBlogList(@PageableDefault(page = 0, size = 2, sort = {"blogName"}) Pageable pageable, Model model) {
         Page<Blog> blogPage = blogService.findAll(pageable);
         model.addAttribute("blogList", blogPage);

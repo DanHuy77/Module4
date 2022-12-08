@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title>Blog List</title>
@@ -17,9 +18,9 @@
         <th>Blog Name</th>
         <th>Writer</th>
         <th>Category</th>
-        <th>Edit</th>
-        <th>View</th>
-        <th>Remove</th>
+        <th sec:authorize="hasRole('ADMIN')">Edit</th>
+        <th sec:authorize="hasRole('ADMIN')">View</th>
+        <th sec:authorize="hasRole('ADMIN')">Remove</th>
     </tr>
     <th:block th:each="blog, status : ${blogList}">
         <tr>
@@ -27,9 +28,9 @@
             <td th:text="${blog.blogName}"></td>
             <td th:text="${blog.writer}"></td>
             <td th:text="${blog.category.name}"></td>
-            <td><a th:href="@{/edit(id=${blog.id})}">Edit</a></td>
-            <td><a th:href="@{/view(id=${blog.id})}">View</a></td>
-            <td><a th:href="@{/remove(id=${blog.id})}">Remove</a></td>
+            <td sec:authorize="hasRole('ADMIN')"><a th:href="@{/edit(id=${blog.id})}">Edit</a></td>
+            <td sec:authorize="hasRole('ADMIN')"><a th:href="@{/view(id=${blog.id})}">View</a></td>
+            <td sec:authorize="hasRole('ADMIN')"><a th:href="@{/remove(id=${blog.id})}">Remove</a></td>
         </tr>
     </th:block>
 </table>

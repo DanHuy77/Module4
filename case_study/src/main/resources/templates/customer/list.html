@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách khách hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+<h1 style="text-align: center">Danh sách khách hàng</h1>
+<th:block th:if="${message}">
+    <h4 style="text-align: center" th:text="${message}"></h4>
+</th:block>
+
+<nav style="float: right" class="navbar">
+    <div class="container-fluid">
+        <form th:action="@{/customer/search}" class="d-flex" role="search" method="post">
+            <input name="key1" class="form-control me-2" type="search" placeholder="Tìm kiếm theo tên"
+                   aria-label="Search">
+            <input name="key2" class="form-control me-2" type="search" placeholder="Và email"
+                   aria-label="Search">
+            <select style="text-align: center" class="form-select" name="key3">
+                <option>- Loại khách -</option>
+                <option th:each="customerType: ${customerTypeList}" th:value="${customerType.id}"
+                th:text="${customerType.name}"></option>
+            </select>
+            <button class="btn btn-outline-success" type="submit"><img width="25px" height="25px" src="https://static.thenounproject.com/png/1063942-200.png"> </button>
+        </form>
+    </div>
+</nav>
+
+
+<table class="table table-success">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tên khách hàng</th>
+        <th scope="col">Sinh nhật</th>
+        <th scope="col">Giới tính</th>
+        <!--        <th scope="col">ID Number</th>-->
+        <th scope="col">Phone Number</th>
+        <th scope="col">Email</th>
+        <th scope="col">Địa chỉ</th>
+        <th scope="col">Loại khách</th>
+        <th scope="col" colspan="3"><a class="btn btn-primary" href="/customer/add">Thêm mới khách hàng</a>
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="customer, status : ${customerList}">
+        <tr>
+            <td th:text="${status.count} + ${customerList.number} * ${customerList.size}"></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.dateOfBirth}"></td>
+            <th:block th:if="${customer.gender}">
+                <td>Nam</td>
+            </th:block>
+            <th:block th:if="${customer.gender == false}">
+                <td>Nữ</td>
+            </th:block>
+            <th:block th:if="${customer.gender == null}">
+                <td>Chưa xác định</td>
+            </th:block>
+            <!--            <td th:text="${customer.idNumber}"></td>-->
+            <td th:text="${customer.phoneNumber}"></td>
+            <td th:text="${customer.email}"></td>
+            <td th:text="${customer.address}"></td>
+            <td th:text="${customer.customerType.name}"></td>
+            <td><a class="btn btn-success" th:href="@{customer/edit(id=${customer.id})}">Cập nhật</a></td>
+            <td><a class="btn btn-warning" th:href="@{customer/details(id=${customer.id})}">Chi tiết</a></td>
+            <td><a class="btn btn-danger"
+                   th:attr="onclick=|passRemoveInfo('${customer.id}', '${customer.name}')|"
+                   data-bs-toggle="modal" data-bs-target="#remove">Xóa</a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<div style="float: right">
+    <a class="btn btn-primary" th:href="@{/customer(page=${customerList.number - 1})}"
+       th:if="${customerList.hasPrevious()}">Trang trước</a>
+    <span th:text="${customerList.number + 1} + '/' + ${customerList.totalPages}"></span>
+    <a class="btn btn-primary" th:href="@{/customer(page=${customerList.number + 1})}"
+       th:if="${customerList.hasNext()}">Trang
+        sau</a>
+</div>
+
+
+<div class="modal fade" id="remove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Chú ý!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{customer/remove}" method="post">
+                <div class="modal-body">
+                    Bạn có muốn xóa khách hàng "<span id="name"></span>" ?
+                    <input name="id" hidden id="id">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+<script>
+    function passRemoveInfo(id, name) {
+        document.getElementById("id").value = id;
+        document.getElementById("name").innerText = name;
+    }
+</script>
+</html>

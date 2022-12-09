@@ -1,6 +1,8 @@
 package crud.project.case_study.service.impl;
 
+import crud.project.case_study.dto.CustomerDto;
 import crud.project.case_study.model.Customer;
+import crud.project.case_study.model.CustomerType;
 import crud.project.case_study.repository.ICustomerRepository;
 import crud.project.case_study.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +34,13 @@ public class CustomerService implements ICustomerService {
     @Override
     public void remove(Integer id) {
         customerRepository.deleteById(id);
+    }
+
+    public Page<Customer> findByNameContainingAndEmailContainingAndCustomerType(String name, String email, CustomerType customerType, Pageable pageable) {
+        return customerRepository.findByNameContainingAndEmailContainingAndCustomerType(name, email, customerType, pageable);
+    }
+
+    public Page<Customer> findByNameContainingAndEmailContaining(String name, String email, Pageable pageable) {
+        return customerRepository.findByNameContainingAndEmailContaining(name, email, pageable);
     }
 }

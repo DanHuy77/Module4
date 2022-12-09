@@ -5,6 +5,7 @@
     <title>Danh sách khách hàng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 <body>
 <h1 style="text-align: center">Danh sách khách hàng</h1>
@@ -19,12 +20,14 @@
                    aria-label="Search">
             <input name="key2" class="form-control me-2" type="search" placeholder="Và email"
                    aria-label="Search">
-            <select style="text-align: center" class="form-select" name="key3">
-                <option>- Loại khách -</option>
+            <select style="text-align: center" class="form-select hideDefaultSelect" name="key3">
+                <option class="defaultSelect" value="">- Loại khách -</option>
                 <option th:each="customerType: ${customerTypeList}" th:value="${customerType.id}"
-                th:text="${customerType.name}"></option>
+                        th:text="${customerType.name}"></option>
             </select>
-            <button class="btn btn-outline-success" type="submit"><img width="25px" height="25px" src="https://static.thenounproject.com/png/1063942-200.png"> </button>
+            <button class="btn btn-outline-success" type="submit"><img width="25px" height="25px"
+                                                                       src="https://static.thenounproject.com/png/1063942-200.png">
+            </button>
         </form>
     </div>
 </nav>
@@ -42,7 +45,7 @@
         <th scope="col">Email</th>
         <th scope="col">Địa chỉ</th>
         <th scope="col">Loại khách</th>
-        <th scope="col" colspan="3"><a class="btn btn-primary" href="/customer/add">Thêm mới khách hàng</a>
+        <th scope="col" colspan="3"><a class="btn btn-primary" th:href="@{/customer/add}">Thêm mới khách hàng</a>
         </th>
 
     </tr>
@@ -66,9 +69,15 @@
             <td th:text="${customer.phoneNumber}"></td>
             <td th:text="${customer.email}"></td>
             <td th:text="${customer.address}"></td>
-            <td th:text="${customer.customerType.name}"></td>
-            <td><a class="btn btn-success" th:href="@{customer/edit(id=${customer.id})}">Cập nhật</a></td>
-            <td><a class="btn btn-warning" th:href="@{customer/details(id=${customer.id})}">Chi tiết</a></td>
+            <th:block th:if="${customer.customerType.name == null}">
+                <td>Chưa xác định</td>
+            </th:block>
+            <th:block th:if="${customer.customerType.name != null}">
+                <td th:text="${customer.customerType.name}"></td>
+            </th:block>
+
+            <td><a class="btn btn-success" th:href="@{/customer/edit(id=${customer.id})}">Cập nhật</a></td>
+            <td><a class="btn btn-warning" th:href="@{/customer/details(id=${customer.id})}">Chi tiết</a></td>
             <td><a class="btn btn-danger"
                    th:attr="onclick=|passRemoveInfo('${customer.id}', '${customer.name}')|"
                    data-bs-toggle="modal" data-bs-target="#remove">Xóa</a>
@@ -94,7 +103,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Chú ý!</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form th:action="@{customer/remove}" method="post">
+            <form th:action="@{/customer/remove}" method="post">
                 <div class="modal-body">
                     Bạn có muốn xóa khách hàng "<span id="name"></span>" ?
                     <input name="id" hidden id="id">
@@ -118,5 +127,12 @@
         document.getElementById("id").value = id;
         document.getElementById("name").innerText = name;
     }
+</script>
+<script>
+    $(".hideDefaultSelect").click(function () {
+        $(".defaultSelect").hide();
+        // $("#customerType").hide();
+        // alert("click")
+    })
 </script>
 </html>

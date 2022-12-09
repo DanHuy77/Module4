@@ -8,19 +8,21 @@ import crud.project.case_study.service.ICustomerService;
 import crud.project.case_study.service.ICustomerTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/customer")
@@ -51,8 +53,11 @@ public class CustomerController {
     }
 
     @PostMapping("/add")
-    public String addCustomer(@ModelAttribute("customerDto") CustomerDto customerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addCustomer(@Validated @ModelAttribute("customerDto") CustomerDto customerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Pageable pageable, Model model) {
         if (bindingResult.hasErrors()) {
+            List<CustomerType> customerTypeList = customerTypeService.findAll(pageable).getContent();
+            model.addAttribute("customerDto", customerDto);
+            model.addAttribute("customerTypeList", customerTypeList);
             return "customer/add";
         }
         Customer customer = new Customer();
@@ -73,8 +78,10 @@ public class CustomerController {
     }
 
     @PostMapping("/edit")
-    public String editCustomer(@ModelAttribute("customerDto") CustomerDto customerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String editCustomer(@Validated @ModelAttribute("customerDto") CustomerDto customerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, Pageable pageable) {
         if (bindingResult.hasErrors()) {
+            List<CustomerType> customerTypeList = customerTypeService.findAll(pageable).getContent();
+            model.addAttribute("customerDto", customerDto);
             return "customer/edit";
         }
         Customer customer = new Customer();
@@ -89,5 +96,33 @@ public class CustomerController {
         customerService.remove(id);
         redirectAttributes.addFlashAttribute("message", "Xóa khách hàng thành công");
         return "redirect:/customer";
+    }
+
+    @PostMapping("/search")
+    public String showSearchResult(@RequestParam(defaultValue = "") String key1, @RequestParam(defaultValue = "") String key2, @RequestParam(defaultValue = "-1") Integer key3, @PageableDefault(size = 2, sort = "name") Pageable pageable, Model model) {
+        try {
+            Page<Customer> customerList;
+            if (key3 == -1) {
+                customerList = customerService.findByNameContainingAndEmailContaining(key1, key2, pageable);
+            } else {
+                CustomerType customerType = customerTypeService.findById(key3);
+                customerList = customerService.findByNameContainingAndEmailContainingAndCustomerType(key1, key2, customerType, pageable);
+            }
+            Pageable pageable1 = Pageable.ofSize(5);
+            List<CustomerType> customerTypeList = customerTypeService.findAll(pageable1).getContent();
+
+            String message = "";
+            if (customerList.isEmpty()) {
+                message = "Không có khách hàng khớp với tìm kiếm";
+            } else {
+                message = "Những khách hàng khớp với tìm kiếm";
+            }
+            model.addAttribute("message", message);
+            model.addAttribute("customerTypeList", customerTypeList);
+            model.addAttribute("customerList", customerList);
+        } catch (NoSuchElementException e) {
+            e.getCause();
+        }
+        return "customer/list";
     }
 }

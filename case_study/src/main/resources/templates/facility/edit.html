@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật cơ sở dịch vụ</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="d-flex justify-content-center">
+    <div class="col-6">
+        <h4 style="text-align: center" th:if="${message != null}" th:text="${message}"></h4>
+
+        <div class="my-5"><h1>Cập nhật cơ sở dịch vụ</h1></div>
+        <form class="my-5" action="/facility/add" method="post" th:object="${facility}">
+            <input hidden type="text" class="form-control" th:field="*{id}">
+
+            <!--            ----------Form chọn kiểu cơ sở------------>
+            <div class="form-group">
+                <label th:for="facilityType">Kiểu cơ sở</label>
+                <select id="facilityType" class="form-select hideDefaultSelect" th:field="*{facilityType}">
+                    <option class="defaultSelect" th:value="null">Hãy chọn Kiểu cơ sở</option>
+                    <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}"
+                            th:text="${facilityType.name}"></option>
+                </select>
+            </div>
+
+            <!--            ----------Form nhập tên------------>
+            <div class="form-group">
+                <label th:for="name">Tên cơ sở dịch vụ</label>
+                <input type="text" class="form-control" th:field="*{name}">
+                <p th:errors="*{name}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form nhập diện tích------------>
+            <div class="form-group">
+                <label th:for="area">Diện tích</label>
+                <input type="text" class="form-control" th:field="*{area}">
+                <p th:errors="*{area}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form nhập chi phí thuê------------>
+            <div class="form-group">
+                <label th:for="cost">Chi phí thuê</label>
+                <input type="text" class="form-control" th:field="*{cost}">
+                <p th:errors="*{cost}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form nhập số người tối đa------------>
+            <div class="form-group">
+                <label th:for="maxUser">Số khách tối đa</label>
+                <input type="number" min="0" class="form-control" th:field="*{maxUser}">
+                <p th:errors="*{maxUser}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form chọn tiêu chuẩn phòng------------>
+            <div class="form-group">
+                <label th:for="roomStandard">Tiêu chuẩn phòng</label>
+                <select class="form-select hideDefaultSelect" th:field="*{roomStandard}">
+                    <option class="defaultSelect" th:value="null">Hãy chọn tiêu chuẩn phòng</option>
+                    <option th:value="Vip" th:text="Vip"></option>
+                    <option th:value="Normal" th:text="Normal"></option>
+                </select>
+                <p th:errors="*{roomStandard}" class="text-danger"></p>
+            </div>
+
+            <!--            ----------Form nhập mô tả tiện nghi khác------------>
+            <div class="form-group">
+                <label th:for="otherDescription">Mô tả tiện nghi khác</label>
+                <input type="text" class="form-control" th:field="*{otherDescription}">
+                <p th:errors="*{otherDescription}" class="text-danger"></p>
+            </div>
+
+            <!--            ----------Form nhập số diện tích hồ bơi------------>
+
+            <div id="poolArea" class="form-group">
+                <label th:for="poolArea">Diện tích hồ bơi</label>
+                <input type="text" class="form-control" th:field="*{poolArea}">
+                <p th:errors="*{poolArea}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form nhập số tầng------------>
+
+            <div id="floorNumber" class="form-group">
+                <label th:for="floorNumber">Số tầng</label>
+                <input type="number" min="0" class="form-control" th:field="*{floorNumber}">
+                <p th:errors="*{floorNumber}" class="text-danger"></p>
+            </div>
+
+            <!--            ----------Form nhập dịch vụ miễn phí đi kèm------------>
+
+
+            <div id="freeService" class="form-group">
+                <label th:for="freeService">Dịch vụ miễn phí đi kèm</label>
+                <input type="text" class="form-control" th:field="*{freeService}">
+                <p th:errors="*{freeService}" class="text-danger"></p>
+            </div>
+
+
+            <!--            ----------Form chọn kiểu thuê------------>
+            <div class="form-group">
+                <label th:for="rentalType">Kiểu thuê</label>
+                <select class="form-select hideDefaultSelect" th:field="*{rentalType}">
+                    <option class="defaultSelect" th:value="null">Hãy chọn Kiểu thuê</option>
+                    <option th:each="rentalType : ${rentalTypeList}" th:value="${rentalType.id}"
+                            th:text="${rentalType.name}"></option>
+                </select>
+            </div>
+
+            <!--            ----------Nút tuỳ chọn------------>
+            <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
+                <button style="width: 30%" type="button" class="form-control btn btn-outline-secondary"
+                        id="formInput110">
+                    <a href="/facility" style="text-decoration: none; color: black">Hủy</a>
+                </button>
+                <input style="width: 30%" type="submit" class="form-control btn btn-outline-success mx-5"
+                       id="formInput11" value="Lưu thông tin">
+            </div>
+            <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
+                <button style="width: 30%" type="button" class="form-control btn btn-success"
+                        id="formInput13">
+                    <a href="/" style="text-decoration: none; color: white">Trang chủ</a>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    $(".hideDefaultSelect").click(function () {
+        $(".defaultSelect").hide();
+        // $("#customerType").hide();
+        // alert("click")
+    })
+</script>
+<script>
+    $(document).ready(function () {
+        function init() {
+
+            if ($('#facilityType').val() == 1) {
+                $('#freeService').hide();
+                $('#poolArea').show();
+                $('#floorNumber').show();
+            }
+
+            if ($('#facilityType').val() == 2) {
+                $('#poolArea').hide();
+                $('#floorNumber').show();
+                $('#freeService').hide();
+            }
+
+            if ($('#facilityType').val() == 3) {
+                $('#poolArea').hide();
+                $('#freeService').hide();
+                $('#floorNumber').hide();
+            }
+        }
+
+        init();
+
+        $('#facilityType').change(function () {
+
+            if ($('#facilityType').val() == 1) {
+                $('#freeService').hide();
+                // $('#freeService2').hide();
+                $('#poolArea').show();
+                $('#floorNumber').show();
+            }
+            if ($('#facilityType').val() == 2) {
+                $('#poolArea').hide();
+                $('#floorNumber').show();
+                $('#freeService').hide();
+                $('#freeService2').hide();
+
+
+            }
+            if ($('#facilityType').val() == 3) {
+                $('#poolArea').hide();
+                $('#freeService').hide();
+                $('#freeService2').show();
+                $('#floorNumber').hide();
+
+            }
+
+            // $("#facilityType").return($('facilityType'));
+        })
+    })
+</script>
+</html>

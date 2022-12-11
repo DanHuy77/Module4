@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách cơ sở dịch vụ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+<h1 style="text-align: center">Danh sách cơ sở dịch vụ</h1>
+<th:block th:if="${message}">
+    <h4 style="text-align: center" th:text="${message}"></h4>
+</th:block>
+
+<nav style="float: right" class="navbar">
+    <div class="container-fluid">
+        <form th:action="@{/facility/search}" class="d-flex" role="search" method="post">
+            <input name="key1" class="form-control me-2" type="search" placeholder="Tên cơ sở"
+                   aria-label="Search">
+            <select style="text-align: center" class="form-select hideDefaultSelect" name="key2">
+                <option class="defaultSelect" value="">Loại cơ sở dịch vụ</option>
+                <option th:each="facilityType: ${facilityTypeList}" th:value="${facilityType.id}"
+                        th:text="${facilityType.name}"></option>
+            </select>
+            <button class="btn btn-outline-success" type="submit"><img width="25px" height="25px"
+                                                                       src="https://static.thenounproject.com/png/1063942-200.png">
+            </button>
+        </form>
+    </div>
+</nav>
+
+
+<table class="table table-success">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tên cơ sở</th>
+        <th scope="col">Diện tích</th>
+        <th scope="col">Chi phí thuê</th>
+        <th scope="col">Số khách tối đa</th>
+        <th scope="col">Tiêu chuẩn phòng</th>
+        <th scope="col">Mô tả tiện nghi khác</th>
+        <th scope="col">Diện tích hồ bơi</th>
+        <th scope="col">Số tầng</th>
+        <th scope="col">Dịch vụ miễn phí đi kèm</th>
+        <th scope="col">Kiểu thuê</th>
+        <th scope="col">Kiểu cơ sở</th>
+        <th scope="col" colspan="3"><a class="btn btn-primary" th:href="@{/facility/add}">Thêm mới cơ sở</a>
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="facility, status : ${facilityList}">
+        <tr>
+            <td th:text="${status.count} + ${facilityList.number} * ${facilityList.size}"></td>
+            <td th:text="${facility.name}"></td>
+            <td th:text="${facility.area}"></td>
+            <td th:text="${facility.cost}"></td>
+            <td th:text="${facility.maxUser}"></td>
+            <td th:text="${facility.roomStandard}"></td>
+            <td th:text="${facility.otherDescription}"></td>
+            <td th:text="${facility.poolArea}"></td>
+            <td th:text="${facility.floorNumber}"></td>
+
+            <th:block th:if="${facility.freeService == null}">
+                <td>Không có dịch vụ</td>
+            </th:block>
+            <th:block th:if="${facility.freeService != null}">
+                <td th:text="${facility.freeService}"></td>
+            </th:block>
+
+
+            <th:block th:if="${facility.rentalType.name == null}">
+                <td>Chưa xác định</td>
+            </th:block>
+            <th:block th:if="${facility.rentalType.name != null}">
+                <td th:text="${facility.rentalType.name}"></td>
+            </th:block>
+
+            <th:block th:if="${facility.facilityType.name == null}">
+                <td>Chưa xác định</td>
+            </th:block>
+
+            <th:block th:if="${facility.facilityType.name != null}">
+                <td th:text="${facility.facilityType.name}"></td>
+            </th:block>
+
+
+            <td><a class="btn btn-success" th:href="@{/facility/edit(id=${facility.id})}">Cập nhật</a></td>
+            <!--            <td><a class="btn btn-warning" th:href="@{/customer/details(id=${customer.id})}">Chi tiết</a></td>-->
+            <td><a class="btn btn-danger"
+                   th:attr="onclick=|passRemoveInfo('${facility.id}', '${facility.name}')|"
+                   data-bs-toggle="modal" data-bs-target="#remove">Xóa</a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<div style="float: right">
+    <a class="btn btn-primary" th:href="@{/facilty(page=${facilityList.number - 1})}"
+       th:if="${facilityList.hasPrevious()}">Trang trước</a>
+    <span th:text="${facilityList.number + 1} + '/' + ${facilityList.totalPages}"></span>
+    <a class="btn btn-primary" th:href="@{/customer(page=${facilityList.number + 1})}"
+       th:if="${facilityList.hasNext()}">Trang
+        sau</a>
+</div>
+
+
+<div class="modal fade" id="remove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Chú ý!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/facility/remove}" method="post">
+                <div class="modal-body">
+                    Bạn có muốn xóa cơ sở "<span id="name"></span>" ?
+                    <input name="id" hidden id="id">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+<script>
+    function passRemoveInfo(id, name) {
+        document.getElementById("id").value = id;
+        document.getElementById("name").innerText = name;
+    }
+</script>
+<script>
+    $(".hideDefaultSelect").click(function () {
+        $(".defaultSelect").hide();
+        // $("#customerType").hide();
+        // alert("click")
+    })
+</script>
+</html>

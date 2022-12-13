@@ -72,20 +72,15 @@
             </th:block>
 
 
-            <th:block th:if="${facility.rentalType.name == null}">
-                <td>Chưa xác định</td>
-            </th:block>
-            <th:block th:if="${facility.rentalType.name != null}">
-                <td th:text="${facility.rentalType.name}"></td>
-            </th:block>
+            <td th:if="${facility.rentalType.name.equals(null)}">Chưa xác định</td>
 
-            <th:block th:if="${facility.facilityType.name == null}">
-                <td>Chưa xác định</td>
-            </th:block>
 
-            <th:block th:if="${facility.facilityType.name != null}">
-                <td th:text="${facility.facilityType.name}"></td>
-            </th:block>
+            <td th:if="${!facility.rentalType.name.equals(null)}" th:text="${facility.rentalType.name}"></td>
+
+
+            <td th:if="${facility.facilityType.name.equals(null)}">Chưa xác định</td>
+
+            <td th:if="${!facility.facilityType.name.equals(null)}" th:text="${facility.facilityType.name}"></td>
 
 
             <td><a class="btn btn-success" th:href="@{/facility/edit(id=${facility.id})}">Cập nhật</a></td>
@@ -99,10 +94,10 @@
     </tbody>
 </table>
 <div style="float: right">
-    <a class="btn btn-primary" th:href="@{/facilty(page=${facilityList.number - 1})}"
+    <a class="btn btn-primary" th:href="@{/facility(page=${facilityList.number - 1})}"
        th:if="${facilityList.hasPrevious()}">Trang trước</a>
     <span th:text="${facilityList.number + 1} + '/' + ${facilityList.totalPages}"></span>
-    <a class="btn btn-primary" th:href="@{/customer(page=${facilityList.number + 1})}"
+    <a class="btn btn-primary" th:href="@{/facility(page=${facilityList.number + 1})}"
        th:if="${facilityList.hasNext()}">Trang
         sau</a>
 </div>

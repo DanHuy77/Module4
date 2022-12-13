@@ -12,7 +12,7 @@ public class DetailsContract {
     @ManyToOne
     private Contract contract;
     @ManyToOne
-    private AttachedService attachedServiceList;
+    private AttachedService attachedService;
 
     public DetailsContract() {
     }
@@ -41,11 +41,11 @@ public class DetailsContract {
         this.contract = contract;
     }
 
-    public AttachedService getAttachedServiceList() {
-        return attachedServiceList;
+    public AttachedService getAttachedService() {
+        return attachedService;
     }
 
-    public void setAttachedServiceList(AttachedService attachedServiceList) {
-        this.attachedServiceList = attachedServiceList;
+    public void setAttachedService(AttachedService attachedService) {
+        this.attachedService = attachedService;
     }
 }

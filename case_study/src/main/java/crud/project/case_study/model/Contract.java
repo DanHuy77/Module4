@@ -2,6 +2,7 @@ package crud.project.case_study.model;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 public class Contract {
@@ -17,6 +18,8 @@ public class Contract {
     private Customer customer;
     @ManyToOne
     private Facility facility;
+    @OneToMany
+    private List<DetailsContract> detailsContractSet;
 
 
     public Contract() {
@@ -54,9 +57,7 @@ public class Contract {
         this.deposit = deposit;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
+    public Employee getEmployee() { return employee;}
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
@@ -76,5 +77,24 @@ public class Contract {
 
     public void setFacility(Facility facility) {
         this.facility = facility;
+    }
+
+    public Contract(Integer id, Date startDay, Date endDay, Double deposit, Employee employee, Customer customer, Facility facility, List<DetailsContract> detailsContractSet) {
+        this.id = id;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.deposit = deposit;
+        this.employee = employee;
+        this.customer = customer;
+        this.facility = facility;
+        this.detailsContractSet = detailsContractSet;
+    }
+
+    public List<DetailsContract> getDetailsContractSet() {
+        return detailsContractSet;
+    }
+
+    public void setDetailsContractSet(List<DetailsContract> detailsContractSet) {
+        this.detailsContractSet = detailsContractSet;
     }
 }

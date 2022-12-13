@@ -16,8 +16,9 @@
     <div class="col-6">
         <h4 style="text-align: center" th:if="${message != null}" th:text="${message}"></h4>
 
-        <div class="my-5"><h1>Thêm mới khách hàng</h1></div>
+        <div class="my-5"><h1>Cập nhật khách hàng</h1></div>
         <form class="my-5" action="/customer/add" method="post" th:object="${customerDto}">
+            <input hidden type="text" th:field="*{id}">
             <!--            ----------Form nhập tên------------>
             <div class="form-group">
                 <label th:for="name">Tên khách hàng</label>

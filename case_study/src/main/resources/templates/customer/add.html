@@ -36,7 +36,7 @@
             <p th:errors="*{customerType}" class="text-danger"></p>
             <!--            ----------Form nhập ngày sinh------------>
             <div class="form-group">
-                <label th:for="formInput2">Ngày sinh</label>
+                <label th:for="dateOfBirth">Ngày sinh</label>
                 <input th:default="null" type="date" class="form-control" th:field="*{dateOfBirth}"
                        min="1920-01-01">
             </div>
@@ -78,18 +78,18 @@
             </div>
             <!--            ----------Nút tuỳ chọn------------>
             <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
-                <button style="width: 30%" type="button" class="form-control btn btn-outline-secondary"
-                        id="formInput110">
-                    <a href="/customer" style="text-decoration: none; color: black">Hủy</a>
-                </button>
+
+                <a class="form-control btn btn-outline-secondary" th:href="@{/customer}"
+                   style="text-decoration: none; color: black; width: 30%">Hủy</a>
+
                 <input style="width: 30%" type="submit" class="form-control btn btn-outline-success mx-5"
-                       id="formInput11" value="Lưu thông tin">
+                       value="Lưu thông tin">
             </div>
             <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
-                <button style="width: 30%" type="button" class="form-control btn btn-success"
-                        id="formInput13">
-                    <a href="/" style="text-decoration: none; color: white">Trang chủ</a>
-                </button>
+
+
+                <a class="form-control btn btn-success" th:href="@{/}"
+                   style="text-decoration: none; color: white; width: 30%">Trang chủ</a>
             </div>
         </form>
     </div>

@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label th:for="roomStandard">Tiêu chuẩn phòng</label>
                 <select class="form-select hideDefaultSelect" th:field="*{roomStandard}">
-                    <option class="defaultSelect" th:value="null">Hãy chọn tiêu chuẩn phòng</option>
+                    <option class="defaultSelect" th:value="Undefined">Hãy chọn tiêu chuẩn phòng</option>
                     <option th:value="Vip" th:text="Vip"></option>
                     <option th:value="Normal" th:text="Normal"></option>
                 </select>
@@ -82,7 +82,7 @@
 
             <!--            ----------Form nhập số diện tích hồ bơi------------>
 
-            <div id="poolArea" class="form-group">
+            <div id="poolArea1" class="form-group">
                 <label th:for="poolArea">Diện tích hồ bơi</label>
                 <input type="text" class="form-control" th:field="*{poolArea}">
                 <p th:errors="*{poolArea}" class="text-danger"></p>
@@ -91,7 +91,7 @@
 
             <!--            ----------Form nhập số tầng------------>
 
-            <div id="floorNumber" class="form-group">
+            <div id="floorNumber1" class="form-group">
                 <label th:for="floorNumber">Số tầng</label>
                 <input type="number" min="0" class="form-control" th:field="*{floorNumber}">
                 <p th:errors="*{floorNumber}" class="text-danger"></p>
@@ -100,7 +100,7 @@
             <!--            ----------Form nhập dịch vụ miễn phí đi kèm------------>
 
 
-            <div id="freeService" class="form-group">
+            <div id="freeService1" class="form-group">
                 <label th:for="freeService">Dịch vụ miễn phí đi kèm</label>
                 <input type="text" class="form-control" th:field="*{freeService}">
                 <p th:errors="*{freeService}" class="text-danger"></p>
@@ -119,18 +119,16 @@
 
             <!--            ----------Nút tuỳ chọn------------>
             <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
-                <button style="width: 30%" type="button" class="form-control btn btn-outline-secondary"
-                        id="formInput110">
-                    <a href="/facility" style="text-decoration: none; color: black">Hủy</a>
-                </button>
+                <a class="form-control btn btn-outline-secondary" href="/facility"
+                   style="text-decoration: none; color: black; width: 30%">Hủy</a>
                 <input style="width: 30%" type="submit" class="form-control btn btn-outline-success mx-5"
                        id="formInput11" value="Lưu thông tin">
             </div>
             <div class="form-group d-flex align-items-center justify-content-center" style="margin-top: 25px">
-                <button style="width: 30%" type="button" class="form-control btn btn-success"
-                        id="formInput13">
-                    <a href="/" style="text-decoration: none; color: white">Trang chủ</a>
-                </button>
+                <a type="button" class="form-control btn btn-success"
+                   href="/" style="text-decoration: none; color: white; width:
+                   30%">Trang
+                    chủ</a>
             </div>
         </form>
     </div>
@@ -139,8 +137,6 @@
 <script>
     $(".hideDefaultSelect").click(function () {
         $(".defaultSelect").hide();
-        // $("#customerType").hide();
-        // alert("click")
     })
 </script>
 <script>
@@ -148,21 +144,21 @@
         function init() {
 
             if ($('#facilityType').val() == 1) {
-                $('#freeService').hide();
-                $('#poolArea').show();
-                $('#floorNumber').show();
+                $('#freeService1').hide();
+                // $('#poolArea1').show();
+                // $('#floorNumber1').show();
             }
 
             if ($('#facilityType').val() == 2) {
-                $('#poolArea').hide();
-                $('#floorNumber').show();
-                $('#freeService').hide();
+                $('#poolArea1').hide();
+                // $('#floorNumber1').show();
+                $('#freeService1').hide();
             }
 
             if ($('#facilityType').val() == 3) {
-                $('#poolArea').hide();
-                $('#freeService').hide();
-                $('#floorNumber').hide();
+                $('#poolArea1').hide();
+                // $('#freeService1').show();
+                $('#floorNumber1').hide()
             }
         }
 
@@ -171,28 +167,25 @@
         $('#facilityType').change(function () {
 
             if ($('#facilityType').val() == 1) {
-                $('#freeService').hide();
-                // $('#freeService2').hide();
-                $('#poolArea').show();
-                $('#floorNumber').show();
+                $('#freeService1').hide();
+                $('#freeService').val(null);
+                $('#poolArea1').show();
+                $('#floorNumber1').show();
             }
             if ($('#facilityType').val() == 2) {
-                $('#poolArea').hide();
-                $('#floorNumber').show();
-                $('#freeService').hide();
-                $('#freeService2').hide();
-
-
+                $('#poolArea1').hide();
+                $('#poolArea').val(null);
+                $('#floorNumber1').show();
+                $('#freeService1').hide();
+                $('#freeService').val(null);
             }
             if ($('#facilityType').val() == 3) {
-                $('#poolArea').hide();
-                $('#freeService').hide();
-                $('#freeService2').show();
-                $('#floorNumber').hide();
-
+                $('#poolArea1').hide();
+                $('#poolArea').val(null);
+                $('#freeService1').show();
+                $('#floorNumber1').hide();
+                $('#floorNumber').val(null);
             }
-
-            // $("#facilityType").return($('facilityType'));
         })
     })
 </script>

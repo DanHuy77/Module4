@@ -99,7 +99,10 @@ public class CustomerController {
     }
 
     @PostMapping("/search")
-    public String showSearchResult(@RequestParam(defaultValue = "") String key1, @RequestParam(defaultValue = "") String key2, @RequestParam(defaultValue = "-1") Integer key3, @PageableDefault(size = 2, sort = "name") Pageable pageable, Model model) {
+    public String showSearchResult(@RequestParam(defaultValue = "") String key1,
+                                   @RequestParam(defaultValue = "") String key2,
+                                   @RequestParam(defaultValue = "-1") Integer key3,
+                                   @PageableDefault(sort = "name") Pageable pageable, Model model) {
         try {
             Page<Customer> customerList;
             if (key3 == -1) {
@@ -120,6 +123,9 @@ public class CustomerController {
             model.addAttribute("message", message);
             model.addAttribute("customerTypeList", customerTypeList);
             model.addAttribute("customerList", customerList);
+            model.addAttribute("key1", key1);
+            model.addAttribute("key2", key2);
+            model.addAttribute("key3", key3);
         } catch (NoSuchElementException e) {
             e.getCause();
         }

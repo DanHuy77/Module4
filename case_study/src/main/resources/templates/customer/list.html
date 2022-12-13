@@ -87,10 +87,12 @@
     </tbody>
 </table>
 <div style="float: right">
-    <a class="btn btn-primary" th:href="@{/customer(page=${customerList.number - 1})}"
+    <a class="btn btn-primary"
+       th:href="@{/customer/search(page=${customerList.number - 1}, key1 = ${key1}, key2 = ${key2}, key3 = ${key3})}"
        th:if="${customerList.hasPrevious()}">Trang trước</a>
     <span th:text="${customerList.number + 1} + '/' + ${customerList.totalPages}"></span>
-    <a class="btn btn-primary" th:href="@{/customer(page=${customerList.number + 1})}"
+    <a class="btn btn-primary"
+       th:href="@{/customer/search(page=${customerList.number + 1}, key1 = ${key1}, key2 = ${key2}, key3 = ${key3})}"
        th:if="${customerList.hasNext()}">Trang
         sau</a>
 </div>

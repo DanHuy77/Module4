@@ -9,7 +9,7 @@ public class AttachedService {
     private Integer id;
     private String name;
     private Double cost;
-    private Integer unit;
+    private String unit;
     private String status;
 
     public AttachedService() {
@@ -39,11 +39,11 @@ public class AttachedService {
         this.cost = cost;
     }
 
-    public Integer getUnit() {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit(Integer unit) {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 

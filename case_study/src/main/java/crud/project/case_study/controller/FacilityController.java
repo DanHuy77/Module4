@@ -7,7 +7,6 @@ import crud.project.case_study.model.RentalType;
 import crud.project.case_study.service.IFacilityService;
 import crud.project.case_study.service.IFacilityTypeService;
 import crud.project.case_study.service.IRentalTypeService;
-import crud.project.case_study.service.impl.FacilityTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -69,7 +68,7 @@ public class FacilityController {
     public String removeFacility(Integer id, RedirectAttributes redirectAttributes) {
         facilityService.remove(id);
         redirectAttributes.addFlashAttribute("message", "Xóa cơ sở dịch vụ thành công");
-        return "facility/list";
+        return "redirect:/facility";
     }
 
     @GetMapping("/edit")

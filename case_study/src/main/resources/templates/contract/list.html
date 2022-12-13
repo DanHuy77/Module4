@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách hợp đồng</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+<h1 style="text-align: center">Danh sách hợp đồng</h1>
+<th:block th:if="${message}">
+    <h4 style="text-align: center" th:text="${message}"></h4>
+</th:block>
+
+<nav style="float: right" class="navbar">
+    <div class="container-fluid">
+        <form th:action="@{/contract/search}" class="d-flex" role="search" method="post">
+            <input name="key1" class="form-control me-2" type="search" aria-label="Search">
+            <!--            <select style="text-align: center" class="form-select hideDefaultSelect" name="key2">-->
+            <!--                <option class="defaultSelect" value="">Loại cơ sở dịch vụ</option>-->
+            <!--                <option th:each="facilityType: ${facilityTypeList}" th:value="${facilityType.id}"-->
+            <!--                        th:text="${facilityType.name}"></option>-->
+            <!--            </select>-->
+            <button class="btn btn-outline-success" type="submit"><img width="25px" height="25px"
+                                                                       src="https://static.thenounproject.com/png/1063942-200.png">
+            </button>
+        </form>
+    </div>
+</nav>
+
+
+<table class="table table-success">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Dịch vụ</th>
+        <th scope="col">Khách hàng</th>
+        <th scope="col">Ngày bắt đầu</th>
+        <th scope="col">Ngày kết thúc</th>
+        <th scope="col">Tiền đặt cọc</th>
+        <th scope="col">Tổng tiền</th>
+        <th colspan="2" scope="col">Các dịch vụ đi kèm</th>
+        <th scope="col" colspan="2"><a class="btn btn-primary" th:href="@{/contract/add}">Thêm mới hợp đồng</a>
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contract,stt : ${contractDtoList}">
+        <td th:text="${stt.count}+${contractDtoList.number}*${contractDtoList.size}"></td>
+        <td th:text="${contract.nameFacility}"></td>
+        <td th:text="${contract.nameCustomer}"></td>
+        <td th:text="${contract.startDay}"></td>
+        <td th:text="${contract.endDay}"></td>
+        <td th:text="${contract.deposit}"></td>
+        <td th:text="${contract.totalValue}"></td>
+        <td><a class="btn btn-primary"
+               th:attr="onclick=|passInfo('${contract.id}', '${contract.nameCustomer}','${contract.startDay}','${contract.endDay}')|"
+               data-bs-toggle="modal" data-bs-target="#addAttachedService">+</a>
+        </td>
+        <td><a class="btn btn-primary"
+               data-bs-toggle="modal" data-bs-target="#attachedServiceList">Danh sách dịch vụ đi kèm</a></td>
+        <td><a class="btn btn-success" th:href="@{/contract/edit(id=${contract.id})}">Cập nhật</a></td>
+        <td><a class="btn btn-danger"
+               th:attr="onclick=|passRemoveInfo('${contract.id}', '${contract.nameCustomer}')|"
+               data-bs-toggle="modal" data-bs-target="#remove">Xóa</a>
+        </td>
+    </tr>
+    </th:block>
+    </tbody>
+</table>
+<div style="float: right">
+    <a class="btn btn-primary" th:href="@{/contract(page=${contractDtoList.number - 1})}"
+       th:if="${contractDtoList.hasPrevious()}">Trang trước</a>
+    <span th:text="${contractDtoList.number + 1} + '/' + ${contractDtoList.totalPages}"></span>
+    <a class="btn btn-primary" th:href="@{/contract(page=${contractDtoList.number + 1})}"
+       th:if="${contractDtoList.hasNext()}">Trang
+        sau</a>
+</div>
+
+<!---------------------------------------- Modal xóa ------------------------------------------------------>
+
+<div class="modal fade" id="remove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Chú ý!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/contract/remove}" method="post">
+                <div class="modal-body">
+                    Bạn có muốn xóa hợp đồng của khách hàng "<span id="name"></span>" ?
+                    <input name="id" hidden id="id">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------- Modal thêm hợp đồng chi tiết ------------------------------------------------>
+
+<div class="modal fade" id="addAttachedService" tabindex="-1" aria-labelledby="addAttachedServiceModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addAttachedServiceModalLabel">Thêm mới hợp đồng chi tiết</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/detailsContract/add}" th:object="${detailsContract}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Dịch vụ đi kèm</label>
+                        <select class="form-select hideDefaultSelect" th:field="*{attachedService}">
+                            <option class="defaultSelect" th:value="null">Hãy chọn dịch vụ đi kèm</option>
+                            <option th:each="attachedService : ${attachedServiceList}"
+                                    th:value="${attachedService.id}"
+                                    th:text="${attachedService.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label th:for="quantity">Số lượng</label>
+                        <input type="number" class="form-control"
+                               th:field="*{quantity}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <br>
+                        <label>Hợp đồng của khách hàng: <span id="contractCustomerName"></span></label>
+                        <input th:field="*{contract.id}" hidden name="contractId" id="contractId"/>
+                    </div>
+
+                    <div>
+                        ------------------------------------------------
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày bắt đầu - Ngày kết thúc</label>
+                        <p><span id="contractStartDay"></span> - <span id="contractEndDay"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function passRemoveInfo(id, name) {
+        document.getElementById("id").value = id;
+        document.getElementById("name").innerText = name;
+    }
+</script>
+<script>
+    function passInfo(id, name, start, end) {
+        document.getElementById("contractId").value = id;
+        document.getElementById("contractCustomerName").innerHTML = name;
+        document.getElementById("contractStartDay").innerHTML = start;
+        document.getElementById("contractEndDay").innerHTML = end;
+    }
+</script>
+</html>

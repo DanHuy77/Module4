@@ -1,6 +1,7 @@
 package crud.project.case_study.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -11,8 +12,8 @@ public class DetailsContract {
     private Integer quantity;
     @ManyToOne
     private Contract contract;
-    @ManyToOne
-    private AttachedService attachedService;
+    @OneToMany
+    private List<AttachedService> attachedServiceList;
 
     public DetailsContract() {
     }
@@ -41,11 +42,11 @@ public class DetailsContract {
         this.contract = contract;
     }
 
-    public AttachedService getAttachedService() {
-        return attachedService;
+    public List<AttachedService> getAttachedServiceList() {
+        return attachedServiceList;
     }
 
-    public void setAttachedService(AttachedService attachedService) {
-        this.attachedService = attachedService;
+    public void setAttachedServiceList(List<AttachedService> attachedServiceList) {
+        this.attachedServiceList = attachedServiceList;
     }
 }

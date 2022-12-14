@@ -46,6 +46,13 @@ public class ContractController {
         model.addAttribute("detailsContractList", detailsContractList);
         model.addAttribute("contractDtoList", contractDtoList);
         model.addAttribute("detailsContract", new DetailsContract());
+
+        for (int i = 0; i < contractDtoList.getContent().size(); i++) {
+            if (contractDtoList.getContent().get(i).getNameCustomer() == null ||
+                    contractDtoList.getContent().get(i).getNameFacility() == null) {
+                contractService.remove(contractDtoList.getContent().get(i).getId());
+            }
+        }
         return "contract/list";
     }
 
@@ -55,7 +62,9 @@ public class ContractController {
         List<Facility> facilityList = facilityService.findAll(pageable).getContent();
         List<Employee> employeeList = employeeService.findAll(pageable).getContent();
         List<AttachedService> attachedServiceList = attachedServiceService.findAll(pageable).getContent();
-        model.addAttribute(new Contract());
+        Contract contract = new Contract();
+        contractService.save(contract);
+        model.addAttribute(contract);
         model.addAttribute(new DetailsContract());
         model.addAttribute("customerList", customerList);
         model.addAttribute("facilityList", facilityList);
@@ -69,5 +78,18 @@ public class ContractController {
         contractService.save(contract);
         redirectAttributes.addFlashAttribute("message", "Thêm mới hợp đồng thành công");
         return "redirect:/contract";
+    }
+
+    @GetMapping("/contract-of-customer")
+    public String showContractOfCustomer(Model model, Integer id, @PageableDefault(size = 5) Pageable pageable) {
+        Page<ContractDto> contractDtoList = contractService.showContractOfCustomer(id, pageable);
+        List<DetailsContract> detailsContractList = detailsContractService.findAll(pageable).getContent();
+        List<AttachedService> attachedServiceList = attachedServiceService.findAll(pageable).getContent();
+
+        model.addAttribute("attachedServiceList", attachedServiceList);
+        model.addAttribute("detailsContractList", detailsContractList);
+        model.addAttribute("detailsContract", new DetailsContract());
+        model.addAttribute("contractDtoList", contractDtoList);
+        return "contract/list";
     }
 }

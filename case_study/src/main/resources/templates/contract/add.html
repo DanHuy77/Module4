@@ -113,7 +113,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Dịch vụ đi kèm</label>
-                        <select class="form-select hideDefaultSelect" th:field="*{attachedService}">
+                        <select class="form-select hideDefaultSelect" th:field="*{attachedServiceList}">
                             <option class="defaultSelect" th:value="null">Hãy chọn dịch vụ đi kèm</option>
                             <option th:each="attachedService : ${attachedServiceList}"
                                     th:value="${attachedService.id}"
@@ -128,7 +128,7 @@
                     </div>
 
                     <div hidden class="form-group">
-                        <input th:field="*{contract.id}" name="contractId" id="contractId"/>
+                        <input th:field="*{contract}" name="contractId" id="contractId"/>
                     </div>
 
                 </div>

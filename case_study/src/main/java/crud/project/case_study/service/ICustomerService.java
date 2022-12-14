@@ -9,4 +9,6 @@ public interface ICustomerService extends IGeneralService<Customer> {
     Page<Customer> findByNameContainingAndEmailContainingAndCustomerType(String name, String email, CustomerType customerType, Pageable pageable);
 
     Page<Customer> findByNameContainingAndEmailContaining(String name, String email, Pageable pageable);
+
+    Page<Customer> showUsingServiceCustomer(Pageable pageable);
 }

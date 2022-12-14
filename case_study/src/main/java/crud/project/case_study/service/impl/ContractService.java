@@ -39,4 +39,9 @@ public class ContractService implements IContractService {
     public Page<ContractDto> showContractDtoList(Pageable pageable) {
         return contractRepository.showContractDtoList(pageable);
     }
+
+    @Override
+    public Page<ContractDto> showContractOfCustomer(Integer id, Pageable pageable) {
+        return contractRepository.showContractOfCustomer(id, pageable);
+    }
 }

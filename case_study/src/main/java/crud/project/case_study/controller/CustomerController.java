@@ -3,12 +3,10 @@ package crud.project.case_study.controller;
 import crud.project.case_study.dto.CustomerDto;
 import crud.project.case_study.model.Customer;
 import crud.project.case_study.model.CustomerType;
-import crud.project.case_study.repository.ICustomerTypeRepository;
 import crud.project.case_study.service.ICustomerService;
 import crud.project.case_study.service.ICustomerTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -130,5 +127,14 @@ public class CustomerController {
             e.getCause();
         }
         return "customer/list";
+    }
+
+    @GetMapping("/customer-list")
+    public String showUsingServiceCustomer(Model model, @PageableDefault(size = 5) Pageable pageable) {
+        Page<Customer> customerList = customerService.showUsingServiceCustomer(pageable);
+        List<CustomerType> customerTypeList = customerTypeService.findAll(pageable).getContent();
+        model.addAttribute("customerTypeList", customerTypeList);
+        model.addAttribute("customerList", customerList);
+        return "customer/using-service-customer-list";
     }
 }

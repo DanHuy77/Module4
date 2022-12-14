@@ -1,5 +1,6 @@
 package crud.project.case_study.service.impl;
 
+import crud.project.case_study.dto.AttachedServiceDto;
 import crud.project.case_study.model.AttachedService;
 import crud.project.case_study.repository.IAttachedServiceRepository;
 import crud.project.case_study.service.IAttachedServiceService;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AttachedServiceService implements IAttachedServiceService {
@@ -32,5 +35,10 @@ public class AttachedServiceService implements IAttachedServiceService {
     @Override
     public void remove(Integer id) {
         attachedServiceRepository.deleteById(id);
+    }
+
+    @Override
+    public List<AttachedServiceDto> getAttachServiceList(Integer id) {
+        return attachedServiceRepository.getAttachServiceList(id);
     }
 }

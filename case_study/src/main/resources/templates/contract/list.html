@@ -64,7 +64,9 @@
                data-bs-toggle="modal" data-bs-target="#addAttachedService">+</a>
         </td>
         <td><a class="btn btn-primary"
-               data-bs-toggle="modal" data-bs-target="#attachedServiceList">Danh sách dịch vụ đi kèm</a></td>
+               data-bs-toggle="modal"
+               data-bs-target="#getAttachFacilityList"
+               th:attr="onclick=|getAttachedServiceList('${contract.id}')|">Danh sách dịch vụ đi kèm</a></td>
         <td><a class="btn btn-success" th:href="@{/contract/edit(id=${contract.id})}">Cập nhật</a></td>
         <td><a class="btn btn-danger"
                th:attr="onclick=|passRemoveInfo('${contract.id}', '${contract.nameCustomer}')|"
@@ -121,7 +123,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Dịch vụ đi kèm</label>
-                        <select class="form-select hideDefaultSelect" th:field="*{attachedService}">
+                        <select class="form-select hideDefaultSelect" th:field="*{attachedServiceList}">
                             <option class="defaultSelect" th:value="null">Hãy chọn dịch vụ đi kèm</option>
                             <option th:each="attachedService : ${attachedServiceList}"
                                     th:value="${attachedService.id}"
@@ -157,6 +159,45 @@
         </div>
     </div>
 </div>
+
+<!--------------------------------------Modal hiển thị dịch vụ đi kèm------------------------------------------------>
+<div class="modal fade" id="getAttachFacilityList" tabindex="-1"
+     aria-labelledby="attachFacilityLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5"  id="attachFacilityLabel">Danh sách dịch vụ đi kèm</h1>
+                <button type="button" class="btn-close btn-outline-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="row">
+                <div class="modal-body">
+                    <div class="row container">
+                        <table class="table table-success">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Giá tiền</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Đơn vị</th>
+                                <th scope="col">Số lượng</th>
+                            </tr>
+                            </thead>
+                            <tbody id="myBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><b>Đóng</b>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 <script>
     function passRemoveInfo(id, name) {
@@ -171,5 +212,36 @@
         document.getElementById("contractStartDay").innerHTML = start;
         document.getElementById("contractEndDay").innerHTML = end;
     }
+</script>
+<script>
+    function getAttachedServiceList(id) {
+        $.ajax({
+            url: 'http://localhost:8080/attachedService/' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                let myTable = "";
+                for (let i = 0; i < data.length; i++) {
+                    myTable +=
+                        `
+                            <tr>
+                              <th scope="row ">${i + 1}</th>
+                              <td>${data[i].name}</td>
+                              <td>${data[i].cost}</td>
+                              <td>${data[i].status}</td>
+                              <td>${data[i].unit}</td>
+                              <td>${data[i].quantity}</td>
+                            </tr>
+                        `
+                }
+                $("#myBody").empty();
+                $("#myBody").append(myTable);
+                // show mod
+
+            }
+        })
+    }
+
 </script>
 </html>
